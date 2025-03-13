@@ -1,3 +1,4 @@
 pytube
-yt-dlp
-python-vlc
+typer
+rich
+getuser
