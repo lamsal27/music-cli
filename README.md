@@ -48,7 +48,7 @@ cd music-cli
 To make the script accessible system-wide, you can add it to `/usr/bin`:
 
 ```bash
-sudo ln -s $(pwd)/main.py /usr/bin/music-cli
+sudo ln -s $(pwd)/music_cli.py /usr/bin/music-cli
 ```
 
 Now you can run the player from anywhere using the `music-cli` command.
@@ -60,7 +60,7 @@ Now you can run the player from anywhere using the `music-cli` command.
 Run the script using Python:
 
 ```bash
-python main.py
+python music_cli.py
 ```
 
 ### Commands
