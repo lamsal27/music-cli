@@ -38,8 +38,13 @@ Run the script using Python:
 python music_cli.py
 ```
 
+## Play Music directly using `play.py`
+For people who want to listen to music without any hassle.
 
-### Commands
+Use this command to play music:
+`python play.py [songName]`
+
+### Commands for `music_cli.py`
 Here are the available commands you can use in the interactive CLI:
 
 | Command           | Description                                      |
