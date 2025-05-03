@@ -1,20 +1,20 @@
 #!/usr/bin/env python3
 
 import os
-import sqlite3
 import subprocess
 import json
 import typer
 from rich.console import Console
 from rich.table import Table
 from rich.progress import Progress
-from rich import box
+# from rich import box
 
 EMOJIS = {
     "play": "▶️",
     "error": "❌",
     "pause": "⏸️",
     "stop": "⏹️",
+    "neutral": "● "
 }
 
 app = typer.Typer(
@@ -23,48 +23,63 @@ app = typer.Typer(
 
 console = Console()
 
+
 class MusicPlayer:
+    def save_history(self, title, uploader, url):
+        history_path = "history.json"
+        from datetime import datetime
+
+        entry = {
+            "title": title,
+            "uploader": uploader,
+            "played": datetime.now().strftime("%Y/%m/%d"),
+            "url": url
+        }
+
+        # Load existing history
+        if os.path.exists(history_path):
+            with open(history_path, "r", encoding="utf-8") as f:
+                try:
+                    data = json.load(f)
+                except json.JSONDecodeError:
+                    data = []
+        else:
+            data = []
+
+        data.append(entry)
+
+        with open(history_path, "w", encoding="utf-8") as f:
+            json.dump(data, f, indent=2, ensure_ascii=False)
+
     def __init__(self):
         self.player = "mpv"
         self.download_dir = "music"
         self._init_data_dir()
-        self._init_library()
 
     def _init_data_dir(self):
         os.makedirs(self.download_dir, exist_ok=True)
 
-    def _init_library(self):
-        with sqlite3.connect("library.db") as conn:
-            conn.execute(
-                """
-                CREATE TABLE IF NOT EXISTS songs (
-                    id INTEGER PRIMARY KEY,
-                    title TEXT UNIQUE,
-                    path TEXT,
-                    added_date DATETIME
-                )
-                """
-            )
-
     def play(self, url, title):
         try:
+            # Extract the stream URL for the YouTube video
             stream_url = subprocess.check_output(
                 ["yt-dlp", "-f", "bestaudio", "-g", url],
                 stderr=subprocess.DEVNULL,
                 text=True,
             ).strip()
+            # Save history
+            uploader = "Unknown"  # Default uploader
+            self.save_history(title, uploader, url)
 
-            console.print(
-                f"{EMOJIS['play']} [bold green]Now playing:[/] {title}"
-            )
-            subprocess.run(['mpv', '--no-cache', stream_url])
+            console.print(f"{EMOJIS['play']} [bold green]Now playing:[/] {title}")
+            # Run mpv to play the stream
+            subprocess.run(['mpv', '--no-cache', '--log-file=/dev/null', '--no-config', '--fs', stream_url])
 
             return True
 
         except Exception as e:
-            console.print(
-                f"{EMOJIS['error']} Playback error: {str(e)}", style="bold red"
-            )
+            # Handle playback error
+            console.print(f"{EMOJIS['error']} Playback error: {str(e)}", style="bold red")
             return False
 
     def download(self, url, title):
@@ -76,33 +91,13 @@ class MusicPlayer:
                 stdout=subprocess.DEVNULL,
                 stderr=subprocess.DEVNULL,
             )
-
-            if result.returncode == 0:
-                self._add_to_library(title, path)
-                return True
-
-            return False
+            return True
 
         except Exception as e:
             console.print(
                 f"{EMOJIS['error']} Download failed: {str(e)}", style="bold red"
             )
             return False
-
-    def _add_to_library(self, title, path):
-        with sqlite3.connect("library.db") as conn:
-            conn.execute(
-                """
-                INSERT OR IGNORE INTO songs (title, path, added_date)
-                VALUES (?, ?, datetime('now'))
-                """,
-                (title, path),
-            )
-
-    def get_library(self):
-        with sqlite3.connect("library.db") as conn:
-            cursor = conn.execute("SELECT title, path FROM songs")
-            return cursor.fetchall()
 
     def search_youtube(self, query, limit=10):
         try:
@@ -122,20 +117,19 @@ class MusicPlayer:
             return []
 
 
-@app.command(help="Play music from YouTube or library")
+@app.command(help="Play music from YouTube")
 def play(query: str = typer.Argument(..., help="Song title or URL")):
     player = MusicPlayer()
 
     if os.path.exists(query):
         return
 
-    with console.status("[bold green]Searching YouTube...[/]"):
+    with console.status("[bold green]Searching For The Song...[/]"):
         results = player.search_youtube(query, limit=10)
         if not results:
             return
 
     os.system("cls" if os.name == "nt" else "clear")
-
     table = Table(
         title="Search Results",
         show_header=True,
@@ -143,9 +137,9 @@ def play(query: str = typer.Argument(..., help="Song title or URL")):
         # box=box.SIMPLE_HEAVY   # cleaner and sturdier
     )
 
-    table.add_column("#", style="cyan", justify="right", width=3)
+    table.add_column("Index", style="cyan", justify="center", max_width=5)
     table.add_column("Title", style="green", overflow="ellipsis", max_width=80)
-    table.add_column("Duration", style="yellow", justify="center", width=10)
+    table.add_column("Duration", style="yellow", justify="center", max_width=10)
 
     def format_time(seconds):
         seconds = int(seconds)
@@ -169,7 +163,7 @@ def play(query: str = typer.Argument(..., help="Song title or URL")):
         url = f"https://www.youtube.com/watch?v={video['id']}"
 
         if player.play(url, title):
-            console.print(f"{EMOJIS['play']} [bold green]Now playing:[/] {title}")
+            console.print(f"{EMOJIS['neutral']}[bold green]Last played:[/] {title}\n")
 
 
 @app.command(help="Download track from YouTube")
@@ -193,19 +187,6 @@ def download(query: str = typer.Argument(..., help="Search query")):
             console.print(f"{EMOJIS['play']} [bold green]Downloaded:[/] {title}")
 
 
-@app.command(help="Show music library")
-def library():
-    player = MusicPlayer()
-
-    table = Table(title="Your Library", show_header=True, header_style="bold purple")
-    table.add_column("Title", style="cyan")
-
-    for title, path in player.get_library():
-        table.add_row(title)
-
-    console.print(table)
-
-
 @app.command(help="Display help information")
 def help():
     """Display help information"""
@@ -223,7 +204,6 @@ def help():
     commands = [
         ("play", "Play music", "play (song/name)"),
         ("download", "Download track", "download (query)"),
-        ("library", "Music library", "library"),
         ("help", "Display help", "help"),
     ]
 
@@ -236,7 +216,5 @@ def help():
 
 
 if __name__ == "__main__":
-    console.print(f"\n{EMOJIS['play']} [bold green]Welcome to Music Player![/]\n")
     app()
-
 
