@@ -1,0 +1,521 @@
+═══════════════════════════════════════════════════════════════════════════════
+                          MUSIC CLI - HELP & GUIDE
+═══════════════════════════════════════════════════════════════════════════════
+
+Welcome to Music CLI! This file will help you learn how to use the program
+effectively. If you haven't read README.md yet, we recommend starting there
+for a more detailed overview.
+
+─────────────────────────────────────────────────────────────────────────────
+QUICK START
+─────────────────────────────────────────────────────────────────────────────
+
+1. First Time Setup
+   → Run: python music.py
+   → Enter your music folder path when prompted
+   → Done! You're ready to use Music CLI
+
+2. Interactive Mode (Recommended for beginners)
+   → Run: python music.py
+   → Choose from the main menu
+   → Follow on-screen prompts
+
+3. Command Line Mode (For power users)
+   → Run: python music.py play "song name"
+   → Run: python music.py download "song name"
+   → Run: python music.py queue "song name"
+
+─────────────────────────────────────────────────────────────────────────────
+MAIN MENU OPTIONS
+─────────────────────────────────────────────────────────────────────────────
+
+When you run "python music.py", you'll see:
+
+    (1) Search Track
+    (2) Library
+    (3) Queue
+    (4) History
+    (5) Settings
+    (0) Exit
+
+Each option is explained below:
+
+─────────────────────────────────────────────────────────────────────────────
+(1) SEARCH TRACK
+─────────────────────────────────────────────────────────────────────────────
+
+What it does:
+  → Searches both your local library and YouTube
+  → Shows results in a table format
+  → Lets you play, download, or queue songs
+
+How to use:
+  1. Choose option (1)
+  2. Type a song name or artist: "Taylor Swift"
+  3. Wait for search results
+  4. Choose an action:
+     • play 1     → Download and play song 1
+     • add 2      → Add song 2 to queue
+     • download 3 → Download song 3 for offline use
+
+Example:
+  Enter song name or artist: Adele Rolling in the Deep
+  (Table of results appears)
+  Enter your choice: play 1
+  → Song plays immediately
+
+Tips:
+  • Search for "artist - song" for better accuracy
+  • Results show ⊘ (offline) and ◈ (online) tags
+  • Offline songs play faster
+  • Songs are downloaded automatically when you play them
+
+─────────────────────────────────────────────────────────────────────────────
+(2) LIBRARY
+─────────────────────────────────────────────────────────────────────────────
+
+What it does:
+  → Manage your music collection
+  → Create and manage playlists
+  → Browse downloaded songs and local files
+
+Sub-menu Options:
+
+  (1) View Downloaded Songs
+      • Shows all music files in your music folder
+      • Includes tracked downloads and local files
+      • Choose songs to play or add to queue
+
+  (2) Create Playlist
+      • Create a new playlist
+      • Name it whatever you want
+      • Add songs to it later
+
+  (3) View Playlists
+      • See all your playlists
+      • Add songs to playlists
+      • Remove songs from playlists
+      • Delete entire playlists
+
+  (4) Play Entire Playlist
+      • Select a playlist
+      • All songs are added to queue
+      • Songs play in order
+
+How to Create a Playlist:
+  1. Choose (2) Create Playlist
+  2. Enter playlist name: "My Favorites"
+  3. Go to (3) View Playlists
+  4. Select your playlist
+  5. Choose "Add Song"
+  6. Select songs to add (space-separated: 1 3 5)
+
+Tip:
+  You can add multiple songs at once using:
+  • Individual: 1 3 5    (adds songs 1, 3, 5)
+  • Range: 1-5           (adds songs 1 through 5)
+  • Mixed: 1 3-5 7       (adds 1, 3, 4, 5, 7)
+
+─────────────────────────────────────────────────────────────────────────────
+(3) QUEUE
+─────────────────────────────────────────────────────────────────────────────
+
+What it does:
+  → Manage your playback queue
+  → Queue persists even after closing the program
+  → Play songs one after another
+
+Queue Options:
+  (1) Play Queue
+      • Plays all songs in queue sequentially
+      • Songs are downloaded on first play if needed
+
+  (2) Remove Song
+      • Remove individual songs from queue
+      • Enter the song number to remove
+
+  (3) Clear Queue
+      • Delete all songs from queue at once
+      • Cannot be undone!
+
+How to Queue Songs:
+  • From Search: Choose "add 1" to add song 1
+  • From History: Choose "add 3" to add from history
+  • From Library: Choose "add 2" to add a downloaded song
+  • From CLI: python music.py queue "Song Name"
+
+Important:
+  ✓ Queue saves automatically
+  ✓ Reopen program and your queue is still there
+  ✓ Only the first song is downloaded immediately
+  ✓ Other songs download when they start playing
+
+─────────────────────────────────────────────────────────────────────────────
+(4) HISTORY
+─────────────────────────────────────────────────────────────────────────────
+
+What it does:
+  → Shows your last 20 played songs
+  → Includes play date and time
+  → Let you replay songs or add them to queue
+
+How to use:
+  1. Choose (4) History
+  2. See table of recently played songs
+  3. Choose an action:
+     • play 1  → Play song 1 again
+     • add 2   → Add song 2 to queue
+
+Example:
+  If you played "Blank Space" yesterday, it appears in history.
+  You can play it again without searching!
+
+─────────────────────────────────────────────────────────────────────────────
+(5) SETTINGS
+─────────────────────────────────────────────────────────────────────────────
+
+What it does:
+  → Customize application behavior
+  → Change audio quality
+  → Modify download location
+
+Settings Available:
+
+  (1) Download Directory
+      Current: /Users/username/Music
+      → Change where songs are saved
+      → Must have write permissions
+
+  (2) Audio Format
+      Default: mp3
+      Options: mp3, m4a, wav
+      → Choose file format for downloads
+
+  (3) Audio Quality
+      Default: bestaudio
+      Options: bestaudio, worst, 192, 320
+      → bestaudio: Best quality, larger file
+      → 320: High quality (320 kbps)
+      → 192: Balanced quality and size
+      → worst: Fastest download, lower quality
+
+  (4) Search Limit
+      Default: 10
+      → How many results to show per search
+      → Higher = more options, slower search
+
+  (5) Auto Download
+      Default: true
+      → true: Download on play, then play offline
+      → false: Stream directly without downloading
+
+  (6) View All Settings
+      → Shows all current configuration values
+      → Displays default values too
+
+How to Change a Setting:
+  1. Choose option (1-5)
+  2. Enter the new value when prompted
+  3. Confirm the update
+  4. Setting saved automatically
+
+Example:
+  Select option: 3
+  Audio quality (bestaudio/worst/192/320): 320
+  ✓ Updated!
+
+─────────────────────────────────────────────────────────────────────────────
+COMMAND LINE MODE (Quick Commands)
+─────────────────────────────────────────────────────────────────────────────
+
+Don't want to use menus? Use direct commands!
+
+Command 1: PLAY
+  Syntax: python music.py play "song name"
+  What it does:
+    • Searches for the song
+    • Shows results table
+    • Automatically plays first result
+    • Exits when done
+
+  Examples:
+    python music.py play "Blinding Lights"
+    python music.py play "The Weeknd"
+    python music.py play "Taylor Swift Anti Hero"
+
+Command 2: DOWNLOAD
+  Syntax: python music.py download "song name"
+  What it does:
+    • Searches for the song
+    • Downloads first result
+    • Does NOT play it
+    • Exits when done
+
+  Examples:
+    python music.py download "Harry Styles Watermelon Sugar"
+    python music.py download "Dua Lipa"
+
+Command 3: QUEUE
+  Syntax: python music.py queue "song name"
+  What it does:
+    • Searches for the song
+    • Adds first result to queue (no table shown)
+    • Does NOT play
+    • Exits immediately
+
+  Examples:
+    python music.py queue "Billie Eilish Bad Guy"
+    python music.py queue "The Beatles"
+
+─────────────────────────────────────────────────────────────────────────────
+COMMON TASKS - STEP BY STEP
+─────────────────────────────────────────────────────────────────────────────
+
+TASK 1: Play a Song Quickly
+  ✓ run: python music.py play "Song Name"
+  ✓ wait for results
+  ✓ song plays automatically
+
+TASK 2: Download for Offline Use
+  ✓ run: python music.py download "Song Name"
+  ✓ wait for download to finish
+  ✓ song saved to your music folder
+
+TASK 3: Create a Playlist
+  ✓ run: python music.py
+  ✓ choose (2) Library
+  ✓ choose (2) Create Playlist
+  ✓ enter playlist name
+  ✓ choose (3) View Playlists
+  ✓ select your playlist
+  ✓ choose "Add Song"
+  ✓ select songs (example: 1 3 5)
+
+TASK 4: Listen to Your Queue
+  ✓ add songs to queue using "add" action
+  ✓ choose (3) Queue
+  ✓ choose (1) Play Queue
+  ✓ songs play one after another
+
+TASK 5: Find a Song You Played Before
+  ✓ choose (4) History
+  ✓ look for the song
+  ✓ choose "play" to replay it
+
+TASK 6: Change Audio Quality
+  ✓ choose (5) Settings
+  ✓ choose (3) Audio Quality
+  ✓ enter: 320 (for high quality)
+  ✓ or: bestaudio (for best quality)
+
+─────────────────────────────────────────────────────────────────────────────
+ACTION SHORTCUTS
+─────────────────────────────────────────────────────────────────────────────
+
+When you see results and need to choose an action, use these:
+
+  play [number]     → Play song number [number]
+                      Example: play 1
+  
+  add [number]      → Add song number [number] to queue
+                      Example: add 2
+  
+  download [number] → Download song number [number]
+                      Example: download 3
+
+  queue [number]    → Same as add (alternate shorthand)
+  
+  p [number]        → Shorthand for play
+                      Example: p 1
+  
+  q [number]        → Shorthand for queue
+                      Example: q 3
+
+─────────────────────────────────────────────────────────────────────────────
+FILE ORGANIZATION
+─────────────────────────────────────────────────────────────────────────────
+
+The program creates/uses these files:
+
+  music.py          → Main application (you run this)
+  config.json       → Settings file (created on first run)
+  music.db          → Database with songs, playlists, queue
+  README.md         → Detailed documentation
+  help.txt          → This file
+
+Your music folder:
+  ~/Music/          → Where songs are downloaded (customizable)
+                      Contains all your downloaded songs
+                      Auto-detects existing music files
+
+─────────────────────────────────────────────────────────────────────────────
+OFFLINE vs ONLINE
+─────────────────────────────────────────────────────────────────────────────
+
+Understanding the difference:
+
+OFFLINE (⊘):
+  • Songs already in your music folder
+  • Play instantly (no internet needed)
+  • Shows instantly in search results
+  • Fastest playback
+
+ONLINE (◈):
+  • Songs on YouTube
+  • Need internet to download/play
+  • Downloaded automatically on play
+  • First play takes longer
+  • Saved for offline use after download
+
+Pro Tip:
+  Download songs ahead of time for faster playback:
+  1. python music.py download "Song Name"
+  2. Later, play directly without waiting
+
+─────────────────────────────────────────────────────────────────────────────
+SEARCH TIPS & TRICKS
+─────────────────────────────────────────────────────────────────────────────
+
+Better Searches:
+  ✗ Weak:  "Blank"
+  ✓ Better: "Blank Space"
+  ✓ Best:  "Taylor Swift Blank Space"
+
+Why?
+  More specific searches = more accurate results
+
+Examples:
+  Artist only:
+    python music.py play "The Weeknd"
+  
+  Song only:
+    python music.py play "Shape of You"
+  
+  Artist and Song (Best):
+    python music.py play "Ed Sheeran Shape of You"
+
+─────────────────────────────────────────────────────────────────────────────
+TROUBLESHOOTING QUICK REFERENCE
+─────────────────────────────────────────────────────────────────────────────
+
+Problem: "No results found"
+Solution:
+  • Check your internet connection
+  • Try a different search term
+  • Search by artist and song together
+
+Problem: Song won't play
+Solution:
+  • Check if mpv is installed (brew install mpv)
+  • Verify music folder path in Settings
+  • Try downloading the song first
+
+Problem: Download takes forever
+Solution:
+  • Check internet speed
+  • Change audio quality to lower setting (192 instead of bestaudio)
+  • Try a different song
+
+Problem: Music folder error
+Solution:
+  • Make sure the path exists and you have permission
+  • Try using absolute path: /Users/username/Music
+  • Delete config.json and restart to re-enter path
+
+Problem: "Unknown setting" error
+Solution:
+  • Check spelling of setting name
+  • Use Settings menu instead of editing config.json
+  • Delete config.json and restart
+
+─────────────────────────────────────────────────────────────────────────────
+KEYBOARD SHORTCUTS & SPECIAL KEYS
+─────────────────────────────────────────────────────────────────────────────
+
+When entering commands:
+  Ctrl + C    → Exit the program anytime
+  Enter       → Confirm your input
+  Backspace   → Delete characters
+
+When choosing actions:
+  1           → Select option 1
+  0           → Go back / Exit menu
+  play 1      → Execute action "play 1"
+  add 2       → Execute action "add 2"
+
+─────────────────────────────────────────────────────────────────────────────
+FREQUENTLY ASKED QUESTIONS
+─────────────────────────────────────────────────────────────────────────────
+
+Q: Where are my downloaded songs saved?
+A: In your music folder. Default path shown in Settings (5).
+   You can change this anytime.
+
+Q: Can I use the program without internet?
+A: Yes! Offline songs play without internet.
+   You can only search/download online songs with internet.
+
+Q: Will my queue be saved if I close the program?
+A: Yes! The queue is persistent and saved to the database.
+   When you reopen, your queue is still there.
+
+Q: Can I share playlists?
+A: Currently, playlists are stored locally.
+   You can export songs and share manually.
+
+Q: How do I delete a playlist?
+A: Go to Library → View Playlists → select playlist → Delete Playlist
+
+Q: Can I change audio formats?
+A: Yes! Go to Settings → Audio Format
+   Supported: mp3, m4a, wav
+
+Q: Why is searching slow?
+A: Searches check both local and online simultaneously.
+   Reduce search limit in Settings (4) for faster results.
+
+Q: Do I need to download songs to play them?
+A: No, you can stream directly. But auto-download is on by default
+   for faster replays. Turn it off in Settings (5) to stream only.
+
+Q: Can I add multiple songs to a playlist at once?
+A: Yes! Use space-separated numbers: 1 3 5
+   Or use ranges: 1-5 (adds 1, 2, 3, 4, 5)
+
+Q: What is the music.db file?
+A: SQLite database storing songs, playlists, and queue.
+   You can safely ignore it - it's managed automatically.
+
+Q: Can I edit config.json manually?
+A: Yes, but using Settings menu is safer.
+   Keep the same structure if editing manually.
+
+─────────────────────────────────────────────────────────────────────────────
+GETTING MORE HELP
+─────────────────────────────────────────────────────────────────────────────
+
+1. Read README.md for detailed documentation
+2. Use the Settings menu to review current configuration
+3. Check error messages - they're usually descriptive
+4. Try searching online for the specific error
+5. Ensure all dependencies are installed (mpv, yt-dlp)
+
+─────────────────────────────────────────────────────────────────────────────
+TIPS FOR BEST EXPERIENCE
+─────────────────────────────────────────────────────────────────────────────
+
+✓ Use "python music.py play" for quick single songs
+✓ Use interactive menu for exploring and managing music
+✓ Download songs while you're online for offline listening
+✓ Create playlists for different moods/occasions
+✓ Check History to rediscover songs you've played
+✓ Set auto-download to true for faster replays
+✓ Use high quality settings when you have good internet
+✓ Keep the music folder organized and backed up
+
+═══════════════════════════════════════════════════════════════════════════════
+  If you liked this mini project of mine, make sure to follow me on GitHub.
+  http://github.com/lamsal27
+═══════════════════════════════════════════════════════════════════════════════
+
+Made with <3 by lamsal27
