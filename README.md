@@ -1,4 +1,4 @@
-# Music CLI - Offline-First Music Player
+# Music CLI - YouTube Integrated Minimal Music Player
 
 A lightweight, efficient command-line music player with offline support, queue management, and playlist functionality. Designed for seamless music playback with minimal dependencies.
 
