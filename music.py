@@ -36,7 +36,7 @@ class Config:
     PATH = SCRIPT_DIR / "config.json"
     DEFAULTS = {
         "audio_format":   "mp3",
-        "audio_quality":  "bestaudio",
+        "audio_quality":  "bestaudio/best",
         "player":         "mpv",
         "search_limit":   5,
         "auto_download":  False,
