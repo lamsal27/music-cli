@@ -12,7 +12,7 @@ For Linux & MAC:
 `pip install yt-dlp rich --break-system-packages` 
 
 Install [mpv](https://mpv.io/installation/) separately.
-Install [yt-dlp](https://github.com/yt-dlp/yt-dlp/wiki/Installation)  if program isn't executing.
+Install [yt-dlp](https://github.com/yt-dlp/yt-dlp/wiki/Installation).
 
 ## Usage
 
