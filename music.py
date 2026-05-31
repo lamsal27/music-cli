@@ -36,7 +36,7 @@ class Config:
     PATH = SCRIPT_DIR / "config.json"
     DEFAULTS = {
         "audio_format":   "mp3",
-        "audio_quality":  "bestaudio/best",
+        "audio_quality":  "bestaudio",
         "player":         "mpv",
         "search_limit":   5,
         "auto_download":  False,
@@ -214,17 +214,30 @@ class Player:
 
         self.db.record_play(url, title, uploader, duration, local if is_local else None)
 
-        path = local or self._stream_url(url)
-        if not path:
-            console.print("  ✘  Could not get stream URL\n", style="red")
-            return False
+        if is_local:
+            return self._mpv(local, stream=False)
 
+        # Try stream URL first, fall back to passing YouTube URL directly to mpv
+        stream = self._stream_url(url)
+        if stream:
+            ok = self._mpv(stream, stream=True)
+            if ok:
+                return True
+            console.print("  [dim]stream failed — retrying via direct URL...[/dim]\n")
+
+        return self._mpv(url, stream=True)
+
+    def _mpv(self, path, stream=False) -> bool:
+        args = [self.cfg.get("player"), "--log-file=/dev/null", "--no-config"]
+        if not stream:
+            args.append("--no-cache")
+        args.append(path)
         try:
-            subprocess.run(
-                [self.cfg.get("player"), "--no-cache", "--log-file=/dev/null", "--no-config", path],
-                timeout=None
-            )
+            subprocess.run(args, timeout=None)
             return True
+        except FileNotFoundError:
+            console.print("  ✘  mpv not found — install from https://mpv.io\n", style="red")
+            return False
         except Exception as e:
             console.print(f"  ✘  {e}\n", style="red")
             return False
@@ -444,7 +457,7 @@ def settings_screen(config: Config, player: Player):
 def interactive(config: Config, db: DB, player: Player):
     while True:
         clr()
-        console.print("\n  [bold cyan]Music-cli (lamsal27)[/]\n")
+        console.print("\n  [bold cyan]music[/]\n")
         console.print("  Enter a song title to search.\n")
         console.print("  [dim]l → library   h → history   , → settings   0 → exit[/dim]\n")
 
