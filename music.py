@@ -15,9 +15,6 @@ from rich.table import Table
 SCRIPT_DIR = Path(__file__).resolve().parent
 console = Console()
 
-
-# ─── Platform default music dir ──────────────────────────────────────────────
-
 def default_music_dir() -> Path:
     if os.name == "nt":
         music = Path.home() / "Music"
@@ -28,9 +25,6 @@ def default_music_dir() -> Path:
         music = Path(xdg) if xdg else Path.home() / "Music"
     music.mkdir(parents=True, exist_ok=True)
     return music
-
-
-# ─── Config ───────────────────────────────────────────────────────────────────
 
 class Config:
     PATH = SCRIPT_DIR / "config.json"
