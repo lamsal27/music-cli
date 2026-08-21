@@ -29,12 +29,13 @@ def default_music_dir() -> Path:
 class Config:
     PATH = SCRIPT_DIR / "config.json"
     DEFAULTS = {
-        "audio_format":   "mp3",
-        "audio_quality":  "bestaudio/best",
-        "player":         "mpv",
-        "search_limit":   5,
-        "auto_download":  False,
-        "search_timeout": 20,
+        "audio_format":    "mp3",
+        "audio_quality":   "bestaudio/best",
+        "player":          "mpv",
+        "search_limit":    5,
+        "auto_download":   True,  # Set auto-download on by default
+        "embed_thumbnail": True,  # Added embed thumbnail option (on by default)
+        "search_timeout":  20,
     }
 
     def __init__(self):
@@ -188,9 +189,22 @@ class Player:
             return str(out)
         console.print(f"\n  ⬇  downloading: {safe}", style="dim")
         try:
+            cmd = [
+                "yt-dlp",
+                "-f", self.cfg.get("audio_quality"),
+                "--extract-audio",
+                "--audio-format", fmt,
+                "-o", str(out)
+            ]
+
+            # Add thumbnail embedding if configured
+            if self.cfg.get("embed_thumbnail", True):
+                cmd.append("--embed-thumbnail")
+
+            cmd.append(url)
+
             r = subprocess.run(
-                ["yt-dlp", "-f", self.cfg.get("audio_quality"), "--extract-audio",
-                 "--audio-format", fmt, "-o", str(out), url],
+                cmd,
                 stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=300
             )
             return str(out) if r.returncode == 0 and out.exists() else None
@@ -420,7 +434,7 @@ def history_screen(player: Player, db: DB):
 
 
 def settings_screen(config: Config, player: Player):
-    keys = ["download_dir", "audio_format", "audio_quality", "search_limit", "auto_download"]
+    keys = ["download_dir", "audio_format", "audio_quality", "search_limit", "auto_download", "embed_thumbnail"]
     while True:
         clr()
         console.print("\n  [bold]Settings[/]\n")
@@ -435,8 +449,8 @@ def settings_screen(config: Config, player: Player):
             v = input(f"\n  {k} = ").strip()
             if not v:
                 continue
-            if k == "search_limit":    v = int(v)
-            elif k == "auto_download": v = v.lower() in ("1", "true", "yes")
+            if k == "search_limit":          v = int(v)
+            elif k in ("auto_download", "embed_thumbnail"): v = v.lower() in ("1", "true", "yes")
             elif k == "download_dir":
                 Path(v).mkdir(parents=True, exist_ok=True)
                 player.download_dir = Path(v)
